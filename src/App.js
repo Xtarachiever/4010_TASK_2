@@ -125,12 +125,12 @@ class App extends Component {
         <React.Fragment>
         <ToastContainer draggable={false}/>
           <div className="container headers">
-            <div className="row row-content">
-              <p style={{fontSize:'17px'}} className="col-3 col-md-1 col-sm-2">STUDENTS</p>
-              <div className="button col-sm-4 col-md-2 col-8 ml-3">
-                <button onClick={this.toggleModal} className="btn-primary"> Batch Download</button>
+            <div className="row justify-content-center align-items-center">
+              <p style={{fontSize:'17px',fontWeight:'700'}} className="col-md col-sm col">STUDENTS</p>
+              <div className="button col-md col-sm col-auto">
+                <button onClick={this.toggleModal}> Batch Download</button>
               </div>
-              <div className="col-sm-12 col-md col-12">
+              <div className="col-md-7 col-sm-6 col-12">
                 <Col className="search">
                     <i className="fa fa-search"></i><Input type="text" name="names" id="names" placeholder="Search for students"/>
                 </Col>
@@ -162,7 +162,7 @@ class App extends Component {
             <ModalHeader toggle={this.toggleModal}>
               Students
             </ModalHeader>
-            <ModalBody>
+            <ModalBody className="modal-body">
               <button name="download" id="download" onClick={this.downloader}>Downloader</button>
               <input type="file" name="_file" id="_file" onChange={this.fileChanger}/>
               <button name="upload" id="upload" onClick={this.fileUploader}>Upload</button>

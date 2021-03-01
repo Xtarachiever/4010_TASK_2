@@ -13,6 +13,10 @@ body{
   flex-direction: row;
   align-items: center;
 }
+.app .headers .row{
+  width: 100%;
+  margin-bottom: 15px;
+}
 .search input{
   padding-left: 35px;
 }
@@ -23,5 +27,25 @@ body{
 .button button{
   border: none;
   border-radius: 10px;
+  background-color: rgb(87, 93, 166);
+  color: #ffffff;
   padding: 6px;
+}
+.modal-body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal-body button{
+  outline: none;
+  border: none;
+  padding: 8px;
+  border-radius: 10px;
+  margin: 5px;
+  background-color: rgb(87, 93, 166);
+  color: white;
+}
+.modal-body input{
+  margin-left: 15px;
+  border: none;
 }
