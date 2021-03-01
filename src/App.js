@@ -84,7 +84,7 @@ class App extends Component {
         })
       }
       else{
-        const promise=new Promise((resolve,reject)=>{
+          const promise=new Promise((resolve,reject)=>{
           const fileReaders=new FileReader();
           fileReaders.readAsArrayBuffer(fileY)
           fileReaders.onload=(e)=>{
@@ -163,7 +163,7 @@ class App extends Component {
               <div className="container">
                 <div className="row align-items-center">
                   <button name="download" id="download" onClick={this.downloader}>Downloader</button>
-                  <input type="file" name="_file" id="_file" onChange={this.fileChanger}/>
+                  <input type="file" name="_file" id="_file" onChange={this.fileChanger} onClick={this.fileExcelReader}/>
                   <button name="upload" id="upload" onClick={this.fileUploader}>Upload</button>
                 </div>
               </div>
