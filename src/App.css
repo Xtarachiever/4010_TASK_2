@@ -3,10 +3,12 @@ body{
   height: 100%;
 }
 .app{
-  height: 100vh;
-  background-color:#F6F8FB;
-  padding-top: 20px;
   width: 100vw;
+  background-color:#F6F8FB;
+  height: 100vh;
+}
+.app{
+  padding-top: 20px;
 }
 .search{
   display: flex;
@@ -44,8 +46,4 @@ body{
   margin: 5px;
   background-color: rgb(87, 93, 166);
   color: white;
-}
-.modal-body input{
-  margin-left: 15px;
-  border: none;
 }

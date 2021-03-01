@@ -135,36 +135,38 @@ class App extends Component {
                 </Col>
               </div>
             </div>
-            <div>
-              <table className="table">
+              {/* <table className="table table-fit">
                 <thead>
                   <tr>
-                    <th scope="col">FirstName</th>
-                    <th scope="col">LastName</th>
-                    <th scope="col">Email Address</th>
-                    <th scope="col">Telephone</th>
+                    <th>FirstName</th>
+                    <th>LastName</th>
+                    <th>Email Address</th>
+                    <th>Telephone</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {/* {
+                  {
                     items.map(item=>{
                       <tr>
                         <td>{item.Gender}</td>
                       </tr>
                     })
-                  } */}
+                  }
                 </tbody>
-              </table>
-            </div>
+              </table> */}
           </div>
           <Modal isOpen={this.state.modalOpen} toggle={this.toggleModal}>
             <ModalHeader toggle={this.toggleModal}>
               Students
             </ModalHeader>
             <ModalBody className="modal-body">
-              <button name="download" id="download" onClick={this.downloader}>Downloader</button>
-              <input type="file" name="_file" id="_file" onChange={this.fileChanger}/>
-              <button name="upload" id="upload" onClick={this.fileUploader}>Upload</button>
+              <div className="container">
+                <div className="row align-items-center">
+                  <button name="download" id="download" onClick={this.downloader}>Downloader</button>
+                  <input type="file" name="_file" id="_file" onChange={this.fileChanger}/>
+                  <button name="upload" id="upload" onClick={this.fileUploader}>Upload</button>
+                </div>
+              </div>
             </ModalBody>
           </Modal>
       </div>
