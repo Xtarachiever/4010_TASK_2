@@ -122,7 +122,6 @@ class App extends Component {
     const {items}=this.state
     return (
       <div className="app justify-content-center">
-        <React.Fragment>
         <ToastContainer draggable={false}/>
           <div className="container headers">
             <div className="row justify-content-center align-items-center">
@@ -168,7 +167,6 @@ class App extends Component {
               <button name="upload" id="upload" onClick={this.fileUploader}>Upload</button>
             </ModalBody>
           </Modal>
-        </React.Fragment>
       </div>
     );
   }
