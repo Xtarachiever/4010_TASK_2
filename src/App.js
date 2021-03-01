@@ -69,7 +69,7 @@ class App extends Component {
     let data=new FormData();
     data.append('_file',fileY);
     console.log(data);
-    fetch('http://room4010-bulk-insert.herokuapp.com/api/v1/user-profiles/create-many',{
+    fetch('//room4010-bulk-insert.herokuapp.com/api/v1/user-profiles/create-many',{
       method:'POST',
       body:data
     })
