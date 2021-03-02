@@ -71,13 +71,15 @@ class App extends Component {
     console.log(data);
     fetch('//room4010-bulk-insert.herokuapp.com/api/v1/user-profiles/create-many',{
       method:'POST',
-      body:data
+      body:data,
     })
-    .then((res)=>{
+    .then(res=>res.json())
+    .then((res)=>
+    {
       const successData=res.ok;
       if(successData===false){
-        toast(res.status)
-        toast(res.statusText,{
+        toast(res.statusCode)
+        toast(res.message,{
           className:"error-toast",
           draggable:true,
           position:toast.POSITION.TOP_RIGHT
@@ -105,7 +107,7 @@ class App extends Component {
           this.setState({
             items:data
           })
-          toast(res.statusText,{
+          toast(res.message,{
             className:"custom-toast",
             draggable:true,
             position:toast.POSITION.TOP_RIGHT
