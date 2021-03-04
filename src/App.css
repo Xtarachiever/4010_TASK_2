@@ -4,6 +4,9 @@ body{
 .app{
   padding-top: 20px;
 }
+.loading{
+  text-align: center;
+}
 .search{
   display: flex;
   flex-direction: row;

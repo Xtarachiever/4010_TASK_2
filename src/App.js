@@ -2,9 +2,12 @@ import React,{Component} from 'react';
 import axios from 'axios';
 import './App.css';
 import {Modal,ModalBody,ModalHeader,Input,Col} from 'reactstrap';
-import {ToastContainer,toast,Zoom,Bounce} from 'react-toastify';
+import {ToastContainer,toast} from 'react-toastify';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Poader from './Loader';
 import 'react-toastify/dist/ReactToastify.css';
 import * as XLSX from 'xlsx';
+import Loader from 'react-loader-spinner';
 class App extends Component {
   constructor(props){
     super(props);
@@ -46,7 +49,9 @@ class App extends Component {
     const fileY=this.state.items;
     let data=new FormData();
     data.append('_file',fileY);
-    console.log(data);
+    this.setState({
+      modalOpen:!this.state.modalOpen
+    })
     fetch('//room4010-bulk-insert.herokuapp.com/api/v1/user-profiles/create-many',{
       method:'POST',
       body:data,
@@ -54,51 +59,49 @@ class App extends Component {
     .then(res=>res.json())
     .then((res)=>
     {
-      const successData=res.ok;
-      console.log(res)
+      const successData=res.success;
+      const promise=new Promise((resolve,reject)=>{
+        const fileReaders=new FileReader();
+        fileReaders.readAsArrayBuffer(fileY)
+        fileReaders.onload=(e)=>{
+          const bufferArray=e.target.result;
+          const workbook=XLSX.read(bufferArray,{
+            type:'buffer'
+          });
+          const workSheetName=workbook.SheetNames[0];
+          const workSheet=workbook.Sheets[workSheetName];
+          const data=XLSX.utils.sheet_to_json(workSheet);
+          resolve(data);
+        }
+        fileReaders.onerror=((error)=>{
+          reject(error);
+        });
+      })
+      promise.then((data)=>{
+        this.setState({
+          items:data
+        })
+      })
       if(successData===false){
         toast(res.statusCode)
         toast(res.message,{
           className:"error-toast",
+          type:'error',
           draggable:true,
           position:toast.POSITION.TOP_RIGHT
         })
       }
       else{
-        this.setState({
-          modalOpen:!this.state.modalOpen
-        })
         // const eachData=this.convertFile(fileY)
         // .then(res=>res)
         // const eachProfile=res.data.notCreated
         // this.setState({
         //   items:eachProfile
         // })
-        const promise=new Promise((resolve,reject)=>{
-          const fileReaders=new FileReader();
-          fileReaders.readAsArrayBuffer(fileY)
-          fileReaders.onload=(e)=>{
-            const bufferArray=e.target.result;
-            const workbook=XLSX.read(bufferArray,{
-              type:'buffer'
-            });
-            const workSheetName=workbook.SheetNames[0];
-            const workSheet=workbook.Sheets[workSheetName];
-            const data=XLSX.utils.sheet_to_json(workSheet);
-            resolve(data);
-          }
-          fileReaders.onerror=((error)=>{
-            reject(error);
-          });
-        })
-        promise.then((data)=>{
-          this.setState({
-            items:data
-          })
-        })
         toast(res.message,{
           className:"custom-toast",
           draggable:true,
+          type:'success',
           position:toast.POSITION.TOP_RIGHT
         })
       }
@@ -128,7 +131,7 @@ class App extends Component {
     const {items}=this.state
     return (
       <div className="app">
-        <ToastContainer draggable={false}/>
+        <ToastContainer draggable={false} autoClose={3000}/>
           <div className="container">
             <div className="row justify-content-md-center align-items-center">
               <div className="col-md-auto col-sm-3 col-4">
@@ -145,6 +148,8 @@ class App extends Component {
             </div>
             {
               items.length > 0 ? (
+                <div>
+                <Poader/>
                 <div className="table-responsive">
                   <table className="table table-striped">
                     <thead>
@@ -159,7 +164,7 @@ class App extends Component {
                       {
                         this.state.items.map(item=>{
                           return(
-                            <tr>
+                            <tr key={item.Email}>
                               <td>{item.First_Name}</td>
                               <td>{item.Last_Name}</td>
                               <td>{item.Email}</td>
@@ -171,6 +176,7 @@ class App extends Component {
                         }
                     </tbody>
                   </table>
+                </div>
                 </div>
               )
               :
