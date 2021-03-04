@@ -36,33 +36,11 @@ class App extends Component {
       modalOpen:!this.state.modalOpen
     })
   }
-  fileChanger=(e)=>{
+  fileChanger=async (e)=>{
     const files=e.target.files[0];
       this.setState({
         items:files
       })
-    // const promise=new Promise((resolve,reject)=>{
-    //   const fileReaders=new FileReader();
-    //   fileReaders.readAsArrayBuffer(files)
-    //   fileReaders.onload=(e)=>{
-    //     const bufferArray=e.target.result;
-    //     const workbook=XLSX.read(bufferArray,{
-    //       type:'buffer'
-    //     });
-    //     const workSheetName=workbook.SheetNames[0];
-    //     const workSheet=workbook.Sheets[workSheetName];
-    //     const data=XLSX.utils.sheet_to_json(workSheet);
-    //     resolve(data);
-    //   }
-    //   fileReaders.onerror=((error)=>{
-    //     reject(error);
-    //   });
-    // })
-    // promise.then((data)=>{
-    //   this.setState({
-    //     items:data
-    //   })
-    // })
   }
   fileUploader=()=>{
     const fileY=this.state.items;
@@ -77,6 +55,7 @@ class App extends Component {
     .then((res)=>
     {
       const successData=res.ok;
+      console.log(res)
       if(successData===false){
         toast(res.statusCode)
         toast(res.message,{
@@ -86,7 +65,16 @@ class App extends Component {
         })
       }
       else{
-          const promise=new Promise((resolve,reject)=>{
+        this.setState({
+          modalOpen:!this.state.modalOpen
+        })
+        // const eachData=this.convertFile(fileY)
+        // .then(res=>res)
+        // const eachProfile=res.data.notCreated
+        // this.setState({
+        //   items:eachProfile
+        // })
+        const promise=new Promise((resolve,reject)=>{
           const fileReaders=new FileReader();
           fileReaders.readAsArrayBuffer(fileY)
           fileReaders.onload=(e)=>{
@@ -107,55 +95,89 @@ class App extends Component {
           this.setState({
             items:data
           })
-          toast(res.message,{
-            className:"custom-toast",
-            draggable:true,
-            position:toast.POSITION.TOP_RIGHT
-          })
+        })
+        toast(res.message,{
+          className:"custom-toast",
+          draggable:true,
+          position:toast.POSITION.TOP_RIGHT
         })
       }
     })
-    this.setState({
-      modalOpen:!this.state.modalOpen
+  }
+  convertFile=(file)=>{
+    return new Promise((resolve,reject)=>{
+      const fileReaders=new FileReader();
+      fileReaders.readAsArrayBuffer(file)
+      fileReaders.onload=(e)=>{
+        const bufferArray=e.target.result;
+        const workbook=XLSX.read(bufferArray,{
+          type:'buffer'
+        });
+        const workSheetName=workbook.SheetNames[0];
+        const workSheet=workbook.Sheets[workSheetName];
+        const data=XLSX.utils.sheet_to_json(workSheet);
+        resolve(data);
+      }
+      fileReaders.onerror=((error)=>{
+        reject(error);
+      });
     })
   }
 
   render(){
     const {items}=this.state
     return (
-      <div className="app justify-content-center">
+      <div className="app">
         <ToastContainer draggable={false}/>
-          <div className="container headers">
-            <div className="row justify-content-center align-items-center">
-              <p style={{fontSize:'17px',fontWeight:'700'}} className="col-md col-sm col">STUDENTS</p>
-              <div className="button col-md col-sm col-auto">
-                <button onClick={this.toggleModal}> Batch Download</button>
+          <div className="container">
+            <div className="row justify-content-md-center align-items-center">
+              <div className="col-md-auto col-sm-3 col-4">
+                <p style={{fontSize:'17px',fontWeight:'700'}}>STUDENTS</p>
               </div>
-              <div className="col-md-7 col-sm-6 col-12">
-                <Col className="search">
-                    <i className="fa fa-search"></i><Input type="text" name="names" id="names" placeholder="Search for students"/>
-                </Col>
-              </div>
+                <div className="button col-md-2 col-sm-4 col-5 ml-auto">
+                  <button onClick={this.toggleModal}> Batch Download</button>
+                </div>
+                <div className="col-md-8 col-sm-12">
+                  <Col className="search">
+                      <i className="fa fa-search"></i><Input type="text" name="names" id="names" placeholder="Search for students"/>
+                  </Col>
+                </div>
             </div>
-              {/* <table className="table table-fit">
-                <thead>
-                  <tr>
-                    <th>FirstName</th>
-                    <th>LastName</th>
-                    <th>Email Address</th>
-                    <th>Telephone</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                    items.map(item=>{
+            {
+              items.length > 0 ? (
+                <div className="table-responsive">
+                  <table className="table table-striped">
+                    <thead>
                       <tr>
-                        <td>{item.Gender}</td>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email Address</th>
+                        <th>Telephone</th>
                       </tr>
-                    })
-                  }
-                </tbody>
-              </table> */}
+                    </thead>
+                    <tbody>
+                      {
+                        this.state.items.map(item=>{
+                          return(
+                            <tr>
+                              <td>{item.First_Name}</td>
+                              <td>{item.Last_Name}</td>
+                              <td>{item.Email}</td>
+                              <td>{item.Phone_Number}</td>
+                            </tr>
+                          )
+                        }
+                        )
+                        }
+                    </tbody>
+                  </table>
+                </div>
+              )
+              :
+              (
+                <p style={{fontSize:'17px',fontWeight:'600'}}>No data imported</p>
+              )
+            }
           </div>
           <Modal isOpen={this.state.modalOpen} toggle={this.toggleModal}>
             <ModalHeader toggle={this.toggleModal}>

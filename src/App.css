@@ -1,11 +1,5 @@
 body{
-  width: 100%;
-  height: 100%;
-}
-.app{
-  width: 100vw;
-  background-color:#F6F8FB;
-  height: 100vh;
+  background-color:#deeafc !important;
 }
 .app{
   padding-top: 20px;
@@ -15,12 +9,12 @@ body{
   flex-direction: row;
   align-items: center;
 }
-.app .headers .row{
-  width: 100%;
-  margin-bottom: 15px;
-}
 .search input{
   padding-left: 35px;
+}
+.row{
+  display: flex;
+  flex-direction: row;
 }
 .search i{
   position: relative;
