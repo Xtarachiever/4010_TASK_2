@@ -57,55 +57,44 @@ class App extends Component {
     .then(res=>res.json())
     .then((res)=>
     {
-      //Try one(1) reading the excel sheet directly
-      // const promise=new Promise((resolve,reject)=>{
-      //   const fileReaders=new FileReader();
-      //   fileReaders.readAsArrayBuffer(fileY)
-      //   fileReaders.onload=(e)=>{
-      //     const bufferArray=e.target.result;
-      //     const workbook=XLSX.read(bufferArray,{
-      //       type:'buffer'
-      //     });
-      //     const workSheetName=workbook.SheetNames[0];
-      //     const workSheet=workbook.Sheets[workSheetName];
-      //     const data=XLSX.utils.sheet_to_json(workSheet);
-      //     resolve(data);
-      //   }
-      //   fileReaders.onerror=((error)=>{
-      //     reject(error);
-      //   });
-      // })
-      // promise.then((data)=>{
-      //   this.setState({
-      //     items:data
-      //   })
-      // })
-      
-      //Try (2) reading the user profiles from the data objects from the request made
-        const eachProfile=res.data.notCreated;
-        this.setState({
-          items:eachProfile
-        })
-      const successData=res.success;
-      const datas=res
-      console.log(datas)
-      if(successData===false){
-        toast(res.statusCode)
-        toast(res.message,{
-          className:"error-toast",
-          type:'error',
-          draggable:true,
-          position:toast.POSITION.TOP_RIGHT
-        })
-      }
-      else{
-        toast(res.message,{
-          className:"custom-toast",
-          draggable:true,
-          type:'success',
-          position:toast.POSITION.TOP_RIGHT
-        })
-      }
+      //Reading the user profiles from the data objects from the request made
+        const resHasData=res.hasOwnProperty('data')
+        if(resHasData){
+          const eachProfile=res.data;
+          const eachUsers=eachProfile.notCreated;
+          const successData=res.success;
+          this.setState({
+            items:eachUsers
+          })
+          if(successData){
+            toast(res.statusCode)
+            toast(res.message,{
+              className:"custom-toast",
+              draggable:true,
+              type:'success',
+              position:toast.POSITION.TOP_RIGHT
+            })
+          }
+          toast(res.message,{
+            className:"error-toast",
+            type:'error',
+            draggable:true,
+            position:toast.POSITION.TOP_RIGHT
+          })
+
+        }
+        else{
+          this.setState({
+            items:[]
+          })
+          toast(res.statusCode)
+          toast(res.message,{
+            className:"error-toast",
+            type:'error',
+            draggable:true,
+            position:toast.POSITION.TOP_RIGHT
+          })
+        }
     })
   }
   convertFile=(file)=>{
